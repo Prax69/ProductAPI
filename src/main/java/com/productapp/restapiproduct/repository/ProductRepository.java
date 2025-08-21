@@ -35,4 +35,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("maxPrice") Double maxPrice,
             @Param("inStock") Boolean inStock
     );
+
+    List<Product> findAllByOrderByQuantityAsc();
+
+    List<Product> findAllByOrderByQuantityDesc();
 }

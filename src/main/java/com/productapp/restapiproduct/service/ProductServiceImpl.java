@@ -85,4 +85,19 @@ public class ProductServiceImpl implements ProductService {
                 .map(product -> mapper.map(product, ProductDTO.class))
                 .toList();
     }
+
+    @Override
+    public List<ProductDTO> sortByQuantityAsc() {
+        return productRepository.findAllByOrderByQuantityAsc()
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class)).toList();
+    }
+
+    @Override
+    public List<ProductDTO> sortByQuantityDesc() {
+        return productRepository.findAllByOrderByQuantityDesc()
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
 }

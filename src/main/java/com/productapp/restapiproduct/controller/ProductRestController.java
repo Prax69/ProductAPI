@@ -89,32 +89,38 @@ public class ProductRestController {
     }
 
 
-    @GetMapping("/sort/asc")
-    public ResponseEntity<List<ProductDTO>> sortProductsByPriceAsc() {
-        logger.info("Sorting products by price in ascending order");
-        List<ProductDTO> sortedProducts = productService.sortByPriceAsc();
+    @GetMapping(value = "/sort", params = {"sortBy"})
+    public ResponseEntity<List<ProductDTO>> sortProductsByPriceAsc(@RequestParam String sortBy) {
+//        write a Switch case where depending on sortBY value which can be quantityAsc, quantityDesc, priceAsc, priceDesc
+        logger.info("Sorting products by: {}", sortBy);
+        List<ProductDTO> sortedProducts;
+
+        switch (sortBy) {
+            case "priceAsc":
+                sortedProducts = productService.sortByPriceAsc();
+                break;
+            case "priceDesc":
+                sortedProducts = productService.sortByPriceDesc();
+                break;
+            case "quantityAsc":
+                sortedProducts = productService.sortByQuantityAsc();
+                break;
+            case "quantityDesc":
+                sortedProducts = productService.sortByQuantityDesc();
+                break;
+            default:
+                logger.warn("Invalid sort parameter: {}", sortBy);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
         if (sortedProducts.isEmpty()) {
-            logger.warn("No products found to sort");
+            logger.warn("No products found to sort by: {}", sortBy);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(sortedProducts);
         } else {
-            logger.info("Total products sorted in ascending order: {}", sortedProducts.size());
+            logger.info("Total products sorted by {}: {}", sortBy, sortedProducts.size());
             return ResponseEntity.ok(sortedProducts);
         }
-    }
 
-    @GetMapping("/sort/desc")
-    public ResponseEntity<List<ProductDTO>> sortProductsByPriceDesc() {
-        logger.info("Sorting products by price in descending order");
-        List<ProductDTO> sortedProducts = productService.sortByPriceDesc();
-
-        if (sortedProducts.isEmpty()) {
-            logger.warn("No products found to sort");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(sortedProducts);
-        } else {
-            logger.info("Total products sorted in descending order: {}", sortedProducts.size());
-            return ResponseEntity.ok(sortedProducts);
-        }
     }
 
     //    Apply filtering on the product list based on the price range
