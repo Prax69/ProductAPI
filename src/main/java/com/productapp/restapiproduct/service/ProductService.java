@@ -15,4 +15,14 @@ public interface ProductService {
 
     void deleteById(int id);
 
+    List<ProductDTO> filterByPriceRange(double minPrice, double maxPrice);
+
+    List<ProductDTO> sortByPriceAsc();
+
+    List<ProductDTO> sortByPriceDesc();
+
+    List<ProductDTO> filterByQuantity(double minQuantity);
+
+    List<ProductDTO> filterProducts(String category, String supplier, double minPrice, double maxPrice, Boolean inStock);
+
 }

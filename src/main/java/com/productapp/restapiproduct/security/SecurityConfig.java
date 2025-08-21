@@ -47,9 +47,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/products/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/users/signup").permitAll()
-
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
+
 
                 )
                 .httpBasic(Customizer.withDefaults());

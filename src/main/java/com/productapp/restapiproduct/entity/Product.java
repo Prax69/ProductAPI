@@ -14,4 +14,7 @@ public class Product {
     String description;
     int price;
     int quantity;
+
+    private String category;
+    private String supplier;
 }

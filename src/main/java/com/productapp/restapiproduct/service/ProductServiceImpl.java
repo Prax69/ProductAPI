@@ -44,4 +44,45 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepository.deleteById(id);
     }
+
+    @Override
+    public List<ProductDTO> filterByPriceRange(double minPrice, double maxPrice) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice)
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> sortByPriceAsc() {
+        return productRepository.findAllByOrderByPriceAsc()
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> sortByPriceDesc() {
+        return productRepository.findAllByOrderByPriceDesc()
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> filterByQuantity(double minQuantity) {
+        return productRepository.findByQuantityGreaterThanEqual(minQuantity)
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> filterProducts(String category, String supplier, double minPrice, double maxPrice, Boolean inStock) {
+        return productRepository.filterProducts(
+                        category, supplier, minPrice, maxPrice, inStock)
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
 }
