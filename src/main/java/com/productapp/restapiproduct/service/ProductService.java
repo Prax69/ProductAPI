@@ -1,5 +1,6 @@
 package com.productapp.restapiproduct.service;
 
+import com.productapp.restapiproduct.entity.FilterDTO;
 import com.productapp.restapiproduct.entity.Product;
 import com.productapp.restapiproduct.entity.ProductDTO;
 
@@ -28,4 +29,8 @@ public interface ProductService {
     List<ProductDTO> sortByQuantityAsc();
 
     List<ProductDTO> sortByQuantityDesc();
+
+    List<ProductDTO> filterProducts(FilterDTO filterDTO);
+
+
 }

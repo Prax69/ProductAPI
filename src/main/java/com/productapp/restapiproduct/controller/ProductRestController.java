@@ -1,5 +1,6 @@
 package com.productapp.restapiproduct.controller;
 
+import com.productapp.restapiproduct.entity.FilterDTO;
 import com.productapp.restapiproduct.entity.Product;
 import com.productapp.restapiproduct.entity.ProductDTO;
 import com.productapp.restapiproduct.service.ProductService;
@@ -148,23 +149,35 @@ public class ProductRestController {
         }
     }
 
-    @GetMapping(value = "/filter", params = {"category", "supplier", "minPrice", "maxPrice", "inStock"})
-    public ResponseEntity<List<ProductDTO>> filterProducts(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String supplier,
-            @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice,
-            @RequestParam(required = false) Boolean inStock) {
-        logger.info("Filtering products: category={}, supplier={}, minPrice={}, maxPrice={}, inStock={}",
-                category, supplier, minPrice, maxPrice, inStock);
+//    @GetMapping(value = "/filter", params = {"category", "supplier", "minPrice", "maxPrice", "inStock"})
+//    public ResponseEntity<List<ProductDTO>> filterProducts(
+//            @RequestParam(required = false) String category,
+//            @RequestParam(required = false) String supplier,
+//            @RequestParam(required = false) Double minPrice,
+//            @RequestParam(required = false) Double maxPrice,
+//            @RequestParam(required = false) Boolean inStock) {
+//        logger.info("Filtering products: category={}, supplier={}, minPrice={}, maxPrice={}, inStock={}",
+//                category, supplier, minPrice, maxPrice, inStock);
+//
+//        List<ProductDTO> filteredProducts = productService.filterProducts(category, supplier, minPrice, maxPrice, inStock);
+//
+//        if (filteredProducts.isEmpty()) {
+//            logger.warn("No products found matching filter criteria");
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        logger.info("Total products found: {}", filteredProducts.size());
+//        return ResponseEntity.ok(filteredProducts);
+//    }
 
-        List<ProductDTO> filteredProducts = productService.filterProducts(category, supplier, minPrice, maxPrice, inStock);
-
+    @GetMapping(value = "/filter")
+    public ResponseEntity<List<ProductDTO>> filterProducts(@RequestBody FilterDTO filterDTO) {
+        logger.info("New way of Filtering products with DTO: {}", filterDTO);
+        List<ProductDTO> filteredProducts = productService.filterProducts(filterDTO);
         if (filteredProducts.isEmpty()) {
             logger.warn("No products found matching filter criteria");
             return ResponseEntity.noContent().build();
         }
-
         logger.info("Total products found: {}", filteredProducts.size());
         return ResponseEntity.ok(filteredProducts);
     }

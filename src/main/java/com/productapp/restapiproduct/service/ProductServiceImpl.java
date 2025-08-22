@@ -1,6 +1,7 @@
 package com.productapp.restapiproduct.service;
 
 
+import com.productapp.restapiproduct.entity.FilterDTO;
 import com.productapp.restapiproduct.entity.Product;
 import com.productapp.restapiproduct.entity.ProductDTO;
 import com.productapp.restapiproduct.mapper.UniversalMapper;
@@ -8,6 +9,7 @@ import com.productapp.restapiproduct.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -96,6 +98,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> sortByQuantityDesc() {
         return productRepository.findAllByOrderByQuantityDesc()
+                .stream()
+                .map(product -> mapper.map(product, ProductDTO.class))
+                .toList();
+    }
+
+    @Override
+    public List<ProductDTO> filterProducts(FilterDTO filterDTO) {
+
+        Map<String, Object> filters = filterDTO.getFilters();
+
+        String category = (String) filters.get("category");
+        String supplier = (String) filters.get("supplier");
+        Double minPrice = filters.get("minPrice") != null ? ((Number) filters.get("minPrice")).doubleValue() : null;
+        Double maxPrice = filters.get("maxPrice") != null ? ((Number) filters.get("maxPrice")).doubleValue() : null;
+        Boolean inStock = (Boolean) filters.get("inStock");
+
+        return productRepository.filterProducts(category, supplier, minPrice, maxPrice, inStock)
                 .stream()
                 .map(product -> mapper.map(product, ProductDTO.class))
                 .toList();
