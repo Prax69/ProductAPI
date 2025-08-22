@@ -1,11 +1,8 @@
 package com.productapp.restapiproduct.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.productapp.restapiproduct.entity.Product;
 import com.productapp.restapiproduct.entity.ProductDTO;
-import com.productapp.restapiproduct.entity.UserDTO;
 import com.productapp.restapiproduct.service.ProductService;
-import com.productapp.restapiproduct.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +88,6 @@ public class ProductRestController {
 
     @GetMapping(value = "/sort", params = {"sortBy"})
     public ResponseEntity<List<ProductDTO>> sortProductsByPriceAsc(@RequestParam String sortBy) {
-//        write a Switch case where depending on sortBY value which can be quantityAsc, quantityDesc, priceAsc, priceDesc
         logger.info("Sorting products by: {}", sortBy);
         List<ProductDTO> sortedProducts;
 
@@ -120,7 +116,6 @@ public class ProductRestController {
             logger.info("Total products sorted by {}: {}", sortBy, sortedProducts.size());
             return ResponseEntity.ok(sortedProducts);
         }
-
     }
 
     //    Apply filtering on the product list based on the price range

@@ -78,18 +78,33 @@ class UserRestControllerTest {
         assertEquals("Invalid username or password", response.getBody());
     }
 
-//    @Test
-//    void testGetCurrentUser_Success() {
-//        Authentication auth = mock(Authentication.class);
-//        when(auth.getName()).thenReturn("john");
-//
-//        User user = new User();
-//        user.setUsername("john");
-//        when(userService.findByUsername("john")).thenReturn(user);
-//
-//        ResponseEntity<User> response = userRestController.getCurrentUser(auth);
-//
-//        assertEquals(200, response.getStatusCodeValue());
-//        assertEquals("john", response.getBody().getUsername());
-//    }
+    @Test
+    void testGetUserById_Success() {
+        UserDTO dto = new UserDTO();
+        dto.setId(1);
+        dto.setUsername("john");
+
+        when(userService.findById(1)).thenReturn(dto);
+
+        ResponseEntity<UserDTO> response = userRestController.getUserById(1);
+
+        verify(userService, times(1)).findById(1);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("john", response.getBody().getUsername());
+    }
+
+    @Test
+    void testGetUserById_NotFound() {
+        UserDTO dto = new UserDTO();
+        dto.setId(1);
+        dto.setUsername("john");
+
+        when(userService.findById(1)).thenReturn(null);
+
+        ResponseEntity<UserDTO> response = userRestController.getUserById(1);
+
+        verify(userService, times(1)).findById(1);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(null, response.getBody());
+    }
 }
