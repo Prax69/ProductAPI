@@ -2,6 +2,7 @@ package com.productapp.restapiproduct.controller;
 
 import com.productapp.restapiproduct.entity.UserDTO;
 import com.productapp.restapiproduct.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,16 +22,14 @@ public class UserRestController {
         this.authenticationManager = authenticationManager;
     }
 
-    // ✅ Register new user
     @PostMapping("/signup")
     public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
         userService.save(userDTO);
         return ResponseEntity.ok("User registered successfully!");
     }
 
-    // ✅ Login endpoint (works with Postman)
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> login(@Valid @RequestBody UserDTO userDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())

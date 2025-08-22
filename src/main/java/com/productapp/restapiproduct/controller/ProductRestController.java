@@ -171,7 +171,8 @@ public class ProductRestController {
 //    }
 
     @GetMapping(value = "/filter")
-    public ResponseEntity<List<ProductDTO>> filterProducts(@RequestBody FilterDTO filterDTO) {
+    public ResponseEntity<List<ProductDTO>> filterProducts(@RequestBody
+                                                           FilterDTO filterDTO) {
         logger.info("New way of Filtering products with DTO: {}", filterDTO);
         List<ProductDTO> filteredProducts = productService.filterProducts(filterDTO);
         if (filteredProducts.isEmpty()) {
