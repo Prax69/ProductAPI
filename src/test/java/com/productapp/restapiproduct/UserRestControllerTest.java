@@ -1,7 +1,6 @@
 package com.productapp.restapiproduct;
 
 import com.productapp.restapiproduct.controller.UserRestController;
-import com.productapp.restapiproduct.entity.User;
 import com.productapp.restapiproduct.entity.UserDTO;
 import com.productapp.restapiproduct.service.UserService;
 import org.junit.jupiter.api.BeforeEach;

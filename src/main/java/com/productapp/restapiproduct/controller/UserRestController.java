@@ -1,7 +1,6 @@
 package com.productapp.restapiproduct.controller;
 
 import com.productapp.restapiproduct.entity.UserDTO;
-import com.productapp.restapiproduct.entity.User;
 import com.productapp.restapiproduct.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

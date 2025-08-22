@@ -26,11 +26,11 @@ public class ProductRestController {
 
     }
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        logger.warn("Received request at /hello");
-        return ResponseEntity.ok("Hello from Product REST API!");
-    }
+//    @GetMapping("/hello")
+//    public ResponseEntity<String> hello() {
+//        logger.warn("Received request at /hello");
+//        return ResponseEntity.ok("Hello from Product REST API!");
+//    }
 
     @GetMapping("/")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
