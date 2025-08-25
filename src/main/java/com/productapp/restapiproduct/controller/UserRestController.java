@@ -1,5 +1,6 @@
 package com.productapp.restapiproduct.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.productapp.restapiproduct.entity.UserDTO;
 import com.productapp.restapiproduct.service.UserService;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,7 +25,7 @@ public class UserRestController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(@Validated(UserDTO.SignupView.class) @RequestBody UserDTO userDTO) {
         userService.save(userDTO);
         return ResponseEntity.ok("User registered successfully!");
     }
@@ -45,7 +47,8 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+    @JsonView(UserDTO.DefaultView.class)
+    public ResponseEntity<UserDTO> getUserById( @PathVariable int id) {
         UserDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
     }

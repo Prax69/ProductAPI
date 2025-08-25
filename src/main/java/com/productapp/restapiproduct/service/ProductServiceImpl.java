@@ -6,7 +6,10 @@ import com.productapp.restapiproduct.entity.Product;
 import com.productapp.restapiproduct.entity.ProductDTO;
 import com.productapp.restapiproduct.mapper.UniversalMapper;
 import com.productapp.restapiproduct.repository.ProductRepository;
+import com.productapp.restapiproduct.specification.ProductSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -79,14 +82,7 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
-    @Override
-    public List<ProductDTO> filterProducts(String category, String supplier, double minPrice, double maxPrice, Boolean inStock) {
-        return productRepository.filterProducts(
-                        category, supplier, minPrice, maxPrice, inStock)
-                .stream()
-                .map(product -> mapper.map(product, ProductDTO.class))
-                .toList();
-    }
+
 
     @Override
     public List<ProductDTO> sortByQuantityAsc() {
@@ -104,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> filterProducts(FilterDTO filterDTO) {
+    public List<ProductDTO> filterProducts(@RequestBody FilterDTO filterDTO) {
 
         Map<String, Object> filters = filterDTO.getFilters();
 
@@ -114,8 +110,16 @@ public class ProductServiceImpl implements ProductService {
         Double maxPrice = filters.get("maxPrice") != null ? ((Number) filters.get("maxPrice")).doubleValue() : null;
         Boolean inStock = (Boolean) filters.get("inStock");
 
-        return productRepository.filterProducts(category, supplier, minPrice, maxPrice, inStock)
-                .stream()
+        Specification<Product> spec = Specification.allOf(
+                ProductSpecification.hasCategory(category),
+                ProductSpecification.hasSupplier(supplier),
+                ProductSpecification.priceGreaterThanOrEqual(minPrice),
+                ProductSpecification.priceLessThanOrEqual(maxPrice),
+                ProductSpecification.inStock(inStock)
+        );
+
+        List<Product> products = productRepository.findAll(spec);
+        return products.stream()
                 .map(product -> mapper.map(product, ProductDTO.class))
                 .toList();
     }

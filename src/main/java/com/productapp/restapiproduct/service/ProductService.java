@@ -24,7 +24,7 @@ public interface ProductService {
 
     List<ProductDTO> filterByQuantity(double minQuantity);
 
-    List<ProductDTO> filterProducts(String category, String supplier, double minPrice, double maxPrice, Boolean inStock);
+   // List<ProductDTO> filterProducts(String category, String supplier, double minPrice, double maxPrice, Boolean inStock);
 
     List<ProductDTO> sortByQuantityAsc();
 
