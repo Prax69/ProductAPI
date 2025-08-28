@@ -7,6 +7,10 @@ import com.productapp.restapiproduct.entity.ProductDTO;
 import com.productapp.restapiproduct.mapper.UniversalMapper;
 import com.productapp.restapiproduct.repository.ProductRepository;
 import com.productapp.restapiproduct.specification.ProductSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,7 +87,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-
     @Override
     public List<ProductDTO> sortByQuantityAsc() {
         return productRepository.findAllByOrderByQuantityAsc()
@@ -122,5 +125,31 @@ public class ProductServiceImpl implements ProductService {
         return products.stream()
                 .map(product -> mapper.map(product, ProductDTO.class))
                 .toList();
+    }
+
+    @Override
+    public Page<ProductDTO> getSortedProducts(String sortBy, Pageable pageable) {
+        Sort sort;
+
+        switch (sortBy) {
+            case "priceAsc":
+                sort = Sort.by(Sort.Direction.ASC, "price");
+                break;
+            case "priceDesc":
+                sort = Sort.by(Sort.Direction.DESC, "price");
+                break;
+            case "quantityAsc":
+                sort = Sort.by(Sort.Direction.ASC, "quantity");
+                break;
+            case "quantityDesc":
+                sort = Sort.by(Sort.Direction.DESC, "quantity");
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid sort parameter: " + sortBy);
+        }
+
+        Page<Product> page = productRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
+
+        return page.map(product -> mapper.map(product, ProductDTO.class));
     }
 }

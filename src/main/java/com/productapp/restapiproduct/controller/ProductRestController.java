@@ -7,6 +7,9 @@ import com.productapp.restapiproduct.service.ProductService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -61,7 +64,7 @@ public class ProductRestController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Product> saveProduct(@Valid @RequestBody ProductDTO productDTO) {
         logger.info("Saving product: {}", productDTO);
         Product savedProduct = productService.save(productDTO);
@@ -69,7 +72,7 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
-    @PutMapping
+    @PutMapping("/")
     public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductDTO productDTO) {
         logger.info("Updating product: {}", productDTO);
         Product updatedProduct = productService.save(productDTO);
@@ -86,7 +89,6 @@ public class ProductRestController {
         return ResponseEntity.ok("Product deleted successfully");
     }
 
-//
 //    @GetMapping(value = "/sort", params = {"sortBy"})
 //    public ResponseEntity<List<ProductDTO>> sortProductsByPriceAsc(@RequestParam String sortBy) {
 //        logger.info("Sorting products by: {}", sortBy);
@@ -118,6 +120,22 @@ public class ProductRestController {
 //            return ResponseEntity.ok(sortedProducts);
 //        }
 //    }
+
+    @GetMapping("/sort")
+    public ResponseEntity<Page<ProductDTO>> sortProducts(
+            @RequestParam(defaultValue = "priceAsc") String sortBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductDTO> sortedProducts = productService.getSortedProducts(sortBy, pageable);
+
+        if (sortedProducts.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(sortedProducts);
+        } else {
+            return ResponseEntity.ok(sortedProducts);
+        }
+    }
 //
 //    //    Apply filtering on the product list based on the price range
 //    @GetMapping(value = "/filter", params = {"minPrice", "maxPrice"})

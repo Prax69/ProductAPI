@@ -50,7 +50,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
 
-
                 )
                 .httpBasic(Customizer.withDefaults());
         http.authenticationProvider(authenticationProvider());
